@@ -1,9 +1,8 @@
 package infrastructure
 
 import (
-	"errors"
 	"demo/src/users/domain/entities"
-	"demo/src/users/domain/repositories"
+	"errors"
 
 	"gorm.io/gorm"
 )
@@ -12,29 +11,28 @@ type UserRepositoryImpl struct {
 	DB *gorm.DB
 }
 
-// NewUserRepositoryImpl creates a new instance of UserRepositoryImpl
-func NewUserRepositoryImpl(db *gorm.DB) repositories.UserRepository {
+func NewUserRepositoryImpl(db *gorm.DB) *UserRepositoryImpl {
 	return &UserRepositoryImpl{DB: db}
 }
 
-// CreateUser creates a new user in the database
-func (r *UserRepositoryImpl) CreateUser(user *entities.User) error {
-	result := r.DB.Create(user)
-	if result.Error != nil {
-		return result.Error
+func (repo *UserRepositoryImpl) CreateUser(user *entities.User) error {
+	if err := repo.DB.Create(user).Error; err != nil {
+		return errors.New("error al guardar el usuario en la base de datos")
 	}
 	return nil
 }
 
-// GetUserByEmail retrieves a user by their email
-func (r *UserRepositoryImpl) GetUserByEmail(email string) (*entities.User, error) {
+func (repo *UserRepositoryImpl) GetUserByEmail(email string) (*entities.User, error) {
 	var user entities.User
-	result := r.DB.Where("email = ?", email).First(&user)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		return nil, errors.New("user not found")
+	if err := repo.DB.Where("email = ?", email).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil // Usuario no encontrado
+		}
+		return nil, errors.New("error al buscar el usuario en la base de datos")
 	}
-	return &user, result.Error
+	return &user, nil
 }
+
 
 // GetUserByID retrieves a user by their ID
 func (r *UserRepositoryImpl) GetUserByID(userID int) (*entities.User, error) {

@@ -20,20 +20,22 @@ func HashPassword(password string) (string, error) {
 	return string(hashedPassword), nil
 }
 
-// CheckPasswordHash compares a hashed password with a plaintext password
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
 
 // GenerateJWT creates a JWT token with user ID and email as claims
+var SECRET_KEY = []byte("secret") // Usa tu clave desde .env
+
 func GenerateJWT(userID int, email string) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":    userID,
-		"email": email,
-		"exp":   time.Now().Add(time.Hour * 24).Unix(), // Token expires in 24 hours
-	})
-	return token.SignedString(jwtSecret)
+	claims := jwt.MapClaims{
+		"user_id": userID,
+		"email":   email,
+		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(SECRET_KEY)
 }
 
 // ValidateJWT validates a JWT token and returns the claims
