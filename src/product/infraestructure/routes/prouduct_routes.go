@@ -5,12 +5,17 @@ import (
     "github.com/gin-gonic/gin"
 )
 
-func RegisterProductRoutes(router *gin.Engine, controller *controllers.ProductController) {
+func RegisterProductRoutes(router *gin.Engine, 
+    createcontroller *controllers.ProductController, 
+    getController *controllers.GetProductController,
+    updateController *controllers.UpdateProductController,
+    deleteController *controllers.DeleteProductController) {
+
     productRoutes := router.Group("/products")
     {
-        productRoutes.POST("/", controller.CreateProduct)
-        productRoutes.GET("/:id", controller.GetProduct)
-        productRoutes.PUT("/:id", controller.UpdateProduct)
-        productRoutes.DELETE("/:id", controller.DeleteProduct)
+        productRoutes.POST("/", createcontroller.CreateProduct)
+        productRoutes.GET("/:id", getController.GetProduct)
+        productRoutes.PUT("/:id", updateController.UpdateProduct)
+        productRoutes.DELETE("/:id", deleteController.DeleteProduct)
     }
 }

@@ -1,3 +1,4 @@
+//src/product/application/putProduct_usecase.go
 package application
 
 import (
@@ -7,10 +8,10 @@ import (
 )
 
 type UpdateProductUsecase struct {
-    Repo repositories.ProductRepository
+    Repo repositories.UpdateProductRepository  // ✅ Usa el repositorio correcto
 }
 
-func NewUpdateProductUsecase(repo repositories.ProductRepository) *UpdateProductUsecase {
+func NewUpdateProductUsecase(repo repositories.UpdateProductRepository) *UpdateProductUsecase {
     return &UpdateProductUsecase{Repo: repo}
 }
 

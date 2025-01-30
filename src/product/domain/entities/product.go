@@ -1,3 +1,4 @@
+//src/product/domain/entities/product.go
 package entities
 
 type Product struct {

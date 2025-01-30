@@ -1,3 +1,4 @@
+// src/core/routes/router.go
 package routes
 
 import (
@@ -10,36 +11,34 @@ import (
 	"demo/src/product/infraestructure/controllers"
 	"demo/src/product/infraestructure/repositories"
 
+
 	"github.com/gorilla/mux"
 	"github.com/gin-gonic/gin"
 )
 
 func NewRouter(db *sql.DB) http.Handler {
-	// Crear router principal con `mux`
 	mainRouter := mux.NewRouter()
-
-	// Registrar rutas de usuarios con `mux`
 	userRoutes.RegisterUserRoutes(mainRouter, db)
 
-	// Crear router de `gin` para productos
-	ginRouter := gin.Default() // Se usa `Default()` para logs y recovery
+	ginRouter := gin.Default()
+
 	productRepo := repositories.NewProductRepository(db)
-	productUsecase := application.NewManageProductsUsecase(productRepo)
-	getProductUsecase := application.NewGetProductUsecase(productRepo)
-	updateProductUsecase := application.NewUpdateProductUsecase(productRepo)
-	deleteProductUsecase := application.NewDeleteProductUsecase(productRepo)
+	getProductRepo := repositories.NewGetProductRepository(db)
+	updateProductRepo := repositories.NewUpdateProductRepository(db)
+	deleteProductRepo := repositories.NewDeleteProductRepository(db)
 
-	productController := controllers.NewProductController(
-		productUsecase,
-		getProductUsecase,
-		updateProductUsecase,
-		deleteProductUsecase,
-	)
+	productUsecase := application.NewCreateProductsUsecase(productRepo)
+	getProductUsecase := application.NewGetProductUsecase(getProductRepo)
+	updateProductUsecase := application.NewUpdateProductUsecase(updateProductRepo)
+	deleteProductUsecase := application.NewDeleteProductUsecase(deleteProductRepo)
 
-	// Registrar rutas de productos en `gin`
-	productRoutes.RegisterProductRoutes(ginRouter, productController)
+	productController := controllers.NewProductController(productUsecase)
+	getProductController := controllers.NewGetProductController(getProductUsecase)
+	updateProductController := controllers.NewUpdateProductController(updateProductUsecase)
+	deleteProductController := controllers.NewDeleteProductController(deleteProductUsecase)
 
-	// Adaptar `ginRouter` para `mux`
+	productRoutes.RegisterProductRoutes(ginRouter, productController, getProductController, updateProductController, deleteProductController)
+
 	mainRouter.PathPrefix("/products").Handler(http.StripPrefix("/products", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ginRouter.ServeHTTP(w, r)
 	})))

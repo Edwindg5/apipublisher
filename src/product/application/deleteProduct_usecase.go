@@ -1,13 +1,13 @@
-// application/deleteProduct_usecase.go
+//src/product/ application/deleteProduct_usecase.go
 package application
 
-import "demo/src/product/infraestructure/repositories"
+import ( "demo/src/product/infraestructure/repositories")
 
 type DeleteProductUsecase struct {
-    Repo repositories.ProductRepository
+    Repo repositories.DeleteProductRepository
 }
 
-func NewDeleteProductUsecase(repo repositories.ProductRepository) *DeleteProductUsecase {
+func NewDeleteProductUsecase(repo repositories.DeleteProductRepository) *DeleteProductUsecase {
     return &DeleteProductUsecase{Repo: repo}
 }
 

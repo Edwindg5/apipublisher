@@ -1,4 +1,4 @@
-// application/getProduct_usecase.go
+// src/product/application/getProduct_usecase.go
 package application
 
 import (
@@ -7,10 +7,10 @@ import (
 )
 
 type GetProductUsecase struct {
-    Repo repositories.ProductRepository
+    Repo repositories.GetProductRepository
 }
 
-func NewGetProductUsecase(repo repositories.ProductRepository) *GetProductUsecase {
+func NewGetProductUsecase(repo repositories.GetProductRepository) *GetProductUsecase {
     return &GetProductUsecase{Repo: repo}
 }
 
