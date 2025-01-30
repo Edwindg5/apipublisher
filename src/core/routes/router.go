@@ -25,7 +25,16 @@ func NewRouter(db *sql.DB) http.Handler {
 	ginRouter := gin.Default() // Se usa `Default()` para logs y recovery
 	productRepo := repositories.NewProductRepository(db)
 	productUsecase := application.NewManageProductsUsecase(productRepo)
-	productController := controllers.NewProductController(productUsecase)
+	getProductUsecase := application.NewGetProductUsecase(productRepo)
+	updateProductUsecase := application.NewUpdateProductUsecase(productRepo)
+	deleteProductUsecase := application.NewDeleteProductUsecase(productRepo)
+
+	productController := controllers.NewProductController(
+		productUsecase,
+		getProductUsecase,
+		updateProductUsecase,
+		deleteProductUsecase,
+	)
 
 	// Registrar rutas de productos en `gin`
 	productRoutes.RegisterProductRoutes(ginRouter, productController)
