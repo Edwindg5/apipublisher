@@ -1,4 +1,3 @@
-// src/core/routes/router.go
 package routes
 
 import (
@@ -10,7 +9,7 @@ import (
 	"demo/src/product/application"
 	"demo/src/product/infraestructure/controllers"
 	"demo/src/product/infraestructure/repositories"
-
+	"demo/src/core"
 
 	"github.com/gorilla/mux"
 	"github.com/gin-gonic/gin"
@@ -18,9 +17,21 @@ import (
 
 func NewRouter(db *sql.DB) http.Handler {
 	mainRouter := mux.NewRouter()
+
+	// APLICAR MIDDLEWARE DE CORS PARA TODAS LAS RUTAS
+	mainRouter.Use(core.MuxCORSMiddleware)
+
+	// RUTA GLOBAL PARA MANEJAR SOLICITUDES OPTIONS
+	mainRouter.Methods(http.MethodOptions).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	})
+
+	// Registrar rutas de usuarios
 	userRoutes.RegisterUserRoutes(mainRouter, db)
 
+	// Configuración de Gin para productos
 	ginRouter := gin.Default()
+	ginRouter.Use(core.GinCORSMiddleware()) // Middleware para Gin
 
 	productRepo := repositories.NewProductRepository(db)
 	getProductRepo := repositories.NewGetProductRepository(db)

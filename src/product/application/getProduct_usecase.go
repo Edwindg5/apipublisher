@@ -17,3 +17,7 @@ func NewGetProductUsecase(repo repositories.GetProductRepository) *GetProductUse
 func (uc *GetProductUsecase) GetProductByID(id int) (*entities.Product, error) {
     return uc.Repo.GetByID(id)
 }
+
+func (uc *GetProductUsecase) GetAllProducts() ([]*entities.Product, error) {
+    return uc.Repo.GetAll()
+}

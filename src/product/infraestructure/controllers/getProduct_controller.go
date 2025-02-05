@@ -16,6 +16,16 @@ func NewGetProductController(getUC *application.GetProductUsecase) *GetProductCo
     return &GetProductController{GetUsecase: getUC}
 }
 
+func (pc *GetProductController) GetAllProducts(c *gin.Context) {
+    products, err := pc.GetUsecase.GetAllProducts()
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener productos"})
+        return
+    }
+    c.JSON(http.StatusOK, products)
+}
+
+
 func (pc *GetProductController) GetProduct(c *gin.Context) {
     id, err := strconv.Atoi(c.Param("id"))
     if err != nil {

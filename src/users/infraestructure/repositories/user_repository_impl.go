@@ -3,6 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"demo/src/users/domain/entities"
+
 	"log"
 )
 

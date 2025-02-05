@@ -13,5 +13,6 @@ func RegisterUserRoutes(router *mux.Router, db *sql.DB) {
 	useCase := application.NewRegisterUserUseCase(repo)
 	controller := controllers.NewUserController(useCase)
 
-	router.HandleFunc("/users/register", controller.RegisterUser).Methods("POST")
+	// ACEPTAR POST Y OPTIONS
+	router.HandleFunc("/users/register", controller.RegisterUser).Methods("POST", "OPTIONS")
 }
