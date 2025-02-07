@@ -26,7 +26,7 @@ func NewRouter(db *sql.DB) http.Handler {
 		w.WriteHeader(http.StatusNoContent)
 	})
 
-	// Registrar rutas de usuarios
+	
 	userRoutes.RegisterUserRoutes(mainRouter, db)
 	
 
