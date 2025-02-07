@@ -28,6 +28,7 @@ func NewRouter(db *sql.DB) http.Handler {
 
 	// Registrar rutas de usuarios
 	userRoutes.RegisterUserRoutes(mainRouter, db)
+	
 
 	// Configuración de Gin para productos
 	ginRouter := gin.Default()
