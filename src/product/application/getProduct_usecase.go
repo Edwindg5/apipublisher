@@ -1,16 +1,15 @@
-// src/product/application/getProduct_usecase.go
 package application
 
 import (
     "demo/src/product/domain/entities"
-    "demo/src/product/infraestructure/repositories"
+    "demo/src/product/domain/interface"
 )
 
 type GetProductUsecase struct {
-    Repo repositories.GetProductRepository
+    Repo interfaces.ProductRepository
 }
 
-func NewGetProductUsecase(repo repositories.GetProductRepository) *GetProductUsecase {
+func NewGetProductUsecase(repo interfaces.ProductRepository) *GetProductUsecase {
     return &GetProductUsecase{Repo: repo}
 }
 

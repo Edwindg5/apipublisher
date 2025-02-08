@@ -6,10 +6,10 @@ import (
 )
 
 type GetUserUseCase struct {
-	Repo *repositories.GetUserRepository
+	Repo *repositories.UserRepository
 }
 
-func NewGetUserUseCase(repo *repositories.GetUserRepository) *GetUserUseCase {
+func NewGetUserUseCase(repo *repositories.UserRepository) *GetUserUseCase {
 	return &GetUserUseCase{Repo: repo}
 }
 

@@ -1,17 +1,16 @@
-//src/product/application/putProduct_usecase.go
 package application
 
 import (
 	"demo/src/product/domain/entities"
-	"demo/src/product/infraestructure/repositories"
+	"demo/src/product/domain/interface"
 	"fmt"
 )
 
 type UpdateProductUsecase struct {
-    Repo repositories.UpdateProductRepository  // ✅ Usa el repositorio correcto
+    Repo interfaces.ProductRepository
 }
 
-func NewUpdateProductUsecase(repo repositories.UpdateProductRepository) *UpdateProductUsecase {
+func NewUpdateProductUsecase(repo interfaces.ProductRepository) *UpdateProductUsecase {
     return &UpdateProductUsecase{Repo: repo}
 }
 

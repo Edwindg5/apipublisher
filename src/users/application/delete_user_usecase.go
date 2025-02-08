@@ -3,10 +3,10 @@ package application
 import "demo/src/users/infraestructure/repositories"
 
 type DeleteUserUseCase struct {
-	Repo *repositories.DeleteUserRepository
+	Repo *repositories.UserRepository
 }
 
-func NewDeleteUserUseCase(repo *repositories.DeleteUserRepository) *DeleteUserUseCase {
+func NewDeleteUserUseCase(repo *repositories.UserRepository) *DeleteUserUseCase {
 	return &DeleteUserUseCase{Repo: repo}
 }
 
