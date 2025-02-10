@@ -8,7 +8,7 @@ import (
 )
 
 type ProductsRepository struct {
-	DB *sql.DB
+	DB *sql.DB	
 }
 
 
@@ -26,7 +26,7 @@ func (r *ProductsRepository) Create(product *entities.Product) error {
 
 func (r *ProductsRepository) GetByID(id int) (*entities.Product, error) {
 	query := "SELECT id, name, description, price FROM products WHERE id = ?"
-	row := r.DB.QueryRow(query, id)
+	row := r.DB.QueryRow(query, id) //se ejecuta la consulta
 
 	var product entities.Product
 	err := row.Scan(&product.ID, &product.Name, &product.Description, &product.Price)

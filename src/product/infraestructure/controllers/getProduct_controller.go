@@ -27,7 +27,7 @@ func (pc *GetProductController) GetAllProducts(c *gin.Context) {
 
 
 func (pc *GetProductController) GetProduct(c *gin.Context) {
-    id, err := strconv.Atoi(c.Param("id"))
+    id, err := strconv.Atoi(c.Param("id")) // convertir el id
     if err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
         return
