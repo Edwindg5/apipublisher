@@ -1,37 +1,41 @@
 package main
 
 import (
-    "log"
-    "net/http"
-    "demo/src/core"
-    "demo/src/core/routes"
-    "github.com/joho/godotenv"
-    "os"
+	"demo/src/core"
+	"demo/src/core/routes"
+
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-    err := godotenv.Load()
-    if err != nil { 
-        log.Fatal("Error al cargar el archivo .env")
-    }
+	// Cargar variables de entorno
+	if err := godotenv.Load(); err != nil {
+		log.Println("⚠️ No se pudo cargar el archivo .env, verificando variables del sistema")
+	}
 
-    db, err := core.ConnectDB()
-    if err != nil {
-        log.Fatal("Error al conectar la base de datos:", err)
-    }
-    defer db.Close()
+	// Verificar la URL de RabbitMQ
+	rabbitURL := os.Getenv("RABBITMQ_URL")
+	if rabbitURL == "" {
+		log.Fatal("❌ ERROR: La variable de entorno RABBITMQ_URL no está configurada")
+	}
+	log.Println("🔍 RabbitMQ URL cargada correctamente")
 
-    router := routes.NewRouter(db)
+	// Conectar a la base de datos
+	db, err := core.ConnectDB()
+	if err != nil {
+		log.Fatal("❌ Error al conectar con la base de datos:", err)
+	}
+	defer db.Close()
 
-    port := os.Getenv("APP_PORT")
-    if port == "" {
-        port = "8080"
-    }
+	// Inicializar el router
+	router := routes.SetupRouter(db)
 
-    log.Println("Servidor corriendo en el puerto", port)
-    log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Println("🚀 Servidor corriendo en http://localhost:8080")
+	if err := http.ListenAndServe(":8080", router); err != nil {
+		log.Fatal("❌ Error al iniciar el servidor:", err)
+	}
 }
-
-
-
-// En la carpeta repositories, solo debe un archivo para todos los metodos, para hacer la injeccion de dependencias, y entidades, se necesita hacer la interface para el ropositorio y hacer bien la json api, osea las urls de los endpoints, y estudiar mas los event drive b
