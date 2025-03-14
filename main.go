@@ -1,9 +1,11 @@
-//api-database/main.go
 package main
 
 import (
 	"demo/src/core"
 	"demo/src/core/routes"
+	"demo/src/pedidos/application"
+	"demo/src/pedidos/infraestructure/controllers"
+	"demo/src/pedidos/infraestructure/repositories"
 
 	"log"
 	"net/http"
@@ -32,13 +34,20 @@ func main() {
 	}
 	defer db.Close()
 
-	router := routes.SetupRouter(db)
+	// 🔹 Instanciar el repositorio y el caso de uso
+	pedidoRepo := repositories.NewUpdatePedidoRepository(db)
+	useCase := &application.UpdatePedidoUseCase{Repo: *pedidoRepo}
 
+	// Configurar el router
+	router := routes.SetupRouter(db)
 	handler := core.CORSMiddleware(router) // Middleware aplicado aquí
-	
+
+	// 🔥 Registrar rutas SSE y actualización de pedido
+	http.HandleFunc("/stream-pedidos", controllers.PedidosSSE)
+	http.HandleFunc("/actualizar-pedido", controllers.ActualizarPedido(useCase))
+
 	log.Println("🚀 Servidor corriendo en http://localhost:8080")
 	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatal("❌ Error al iniciar el servidor:", err)
 	}
-	
 }

@@ -1,3 +1,4 @@
+// api-database/src/pedidos/application/get_usecase.go
 package application
 
 import (
@@ -19,3 +20,8 @@ func (uc *GetPedidoUseCase) BuscarPedidoPorID(id int) (entities.Pedido, error) {
 func (uc *GetPedidoUseCase) ObtenerTodosLosProductos() ([]entities.Pedido, error) {
 	return uc.Repo.ObtenerTodosLosProductos()
 }
+
+func (uc *GetPedidoUseCase) ObtenerPedidosPorCorreo(correo string) ([]entities.Pedido, error) {
+	return uc.Repo.ObtenerPedidosPorCorreo(correo)
+}
+

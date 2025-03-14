@@ -1,3 +1,4 @@
+// api-database/src/pedidos/infraestructure/repositories/get_pedido_repository.go
 package repositories
 
 import (
@@ -61,3 +62,23 @@ func (r *GetPedidoRepository) ObtenerTodosLosProductos() ([]entities.Pedido, err
 	}
 	return productos, nil
 }
+
+func (repo *GetPedidoRepository) ObtenerPedidosPorCorreo(correo string) ([]entities.Pedido, error) {
+	rows, err := repo.DB.Query("SELECT id, cliente, producto, cantidad, estado FROM pedidos WHERE cliente = ?", correo)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var pedidos []entities.Pedido
+	for rows.Next() {
+		var p entities.Pedido
+		err := rows.Scan(&p.ID, &p.Cliente, &p.Producto, &p.Cantidad, &p.Estado)
+		if err != nil {
+			return nil, err
+		}
+		pedidos = append(pedidos, p)
+	}
+	return pedidos, nil
+}
+

@@ -9,6 +9,7 @@ type PedidoRepository interface {
 	BuscarPedidoPorID(id int) (entities.Pedido, error)
 	ActualizarPedidoPorProducto(pedido entities.Pedido) error
 	ObtenerTodosLosProductos() ([]entities.Pedido, error)
+	ObtenerPedidosPorCorreo(correo string) ([]entities.Pedido, error)
 
 	ObtenerPedidosPendientesPorProducto(nombreProducto string) ([]entities.Pedido, error)
 	CambiarEstadoPedido(id int, estado string) error

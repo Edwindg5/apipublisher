@@ -23,7 +23,9 @@ func RegisterPedidoRoutes(router *mux.Router, db *sql.DB) {
 	router.HandleFunc("/pedidos/{id:[0-9]+}", controllers.BuscarPedidoPorID(getUseCase)).Methods("GET")
 	router.HandleFunc("/pedidos/{id:[0-9]+}", controllers.ActualizarPedido(putUseCase)).Methods("PUT")
 	router.HandleFunc("/productos", controllers.ObtenerProductos(getUseCase)).Methods("GET")
+	router.HandleFunc("/pedidos/correo/{correo}", controllers.ObtenerPedidosPorCorreo(getUseCase)).Methods("GET")
 	router.HandleFunc("/pedidos/actualizar", controllers.ActualizarPedido(putUseCase)).Methods("PUT")
+	router.HandleFunc("/stream-pedidos", controllers.PedidosSSE).Methods("GET")
 
 
 }
