@@ -1,4 +1,4 @@
-//api-database/src/pedidos/domain/entities/pedido.go
+// api-database/src/pedidos/domain/entities/pedido.go
 package entities
 
 type Pedido struct {

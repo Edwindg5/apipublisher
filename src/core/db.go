@@ -11,7 +11,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Función para obtener variables de entorno con un valor por defecto
+
 func getEnv(key, fallback string) string {
 	if value, exists := os.LookupEnv(key); exists {
 		return value
@@ -26,18 +26,17 @@ func loadEnv() {
 	}
 }
 
-// ConnectDB establece la conexión con MySQL y devuelve una instancia de *sql.DB
+
 func ConnectDB() (*sql.DB, error) {
 	loadEnv()
 
-	// 📌 Imprimir valores para depuración
 	log.Println("📌 Cargando configuración de la base de datos:")
 	log.Println("DB_USER:", os.Getenv("DB_USER"))
 	log.Println("DB_HOST:", os.Getenv("DB_HOST"))
 	log.Println("DB_PORT:", getEnv("DB_PORT", "3306"))
 	log.Println("DB_NAME:", os.Getenv("DB_NAME"))
 
-	// Formato DSN corregido
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
@@ -52,7 +51,7 @@ func ConnectDB() (*sql.DB, error) {
 		return nil, err
 	}
 
-	// Verificar la conexión
+
 	if err := db.Ping(); err != nil {
 		log.Println("❌ Error al hacer ping a MySQL:", err)
 		return nil, err

@@ -10,9 +10,20 @@ import (
 )
 
 func RegisterPedidoRoutes(router *mux.Router, db *sql.DB) {
-    pedidoRepo := repositories.NewPedidoRepository(db)
-    pedidoUseCase := &application.PedidoUseCase{Repo: pedidoRepo}
+	createRepo := repositories.NewCreatePedidoRepository(db)
+	getRepo := repositories.NewGetPedidoRepository(db)
+	updateRepo := repositories.NewUpdatePedidoRepository(db)
 
-    router.HandleFunc("/pedidos", controllers.CrearPedido(pedidoUseCase)).Methods("POST")
-    router.HandleFunc("/pedidos/{nombre}", controllers.BuscarPedidoPorNombre(db)).Methods("GET")
+	createUseCase := &application.CreatePedidoUseCase{Repo: *createRepo}
+	getUseCase := &application.GetPedidoUseCase{Repo: *getRepo}
+	putUseCase := &application.UpdatePedidoUseCase{Repo: *updateRepo}
+
+	router.HandleFunc("/pedidos", controllers.CrearPedido(createUseCase)).Methods("POST")
+	router.HandleFunc("/pedidos/pendientes", controllers.ObtenerPedidosPendientes(getUseCase)).Methods("GET")
+	router.HandleFunc("/pedidos/{id:[0-9]+}", controllers.BuscarPedidoPorID(getUseCase)).Methods("GET")
+	router.HandleFunc("/pedidos/{id:[0-9]+}", controllers.ActualizarPedido(putUseCase)).Methods("PUT")
+	router.HandleFunc("/productos", controllers.ObtenerProductos(getUseCase)).Methods("GET")
+	router.HandleFunc("/pedidos/actualizar", controllers.ActualizarPedido(putUseCase)).Methods("PUT")
+
+
 }

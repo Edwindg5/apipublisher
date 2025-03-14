@@ -1,3 +1,4 @@
+//api-database/main.go
 package main
 
 import (
@@ -31,11 +32,13 @@ func main() {
 	}
 	defer db.Close()
 
-	// Inicializar el router
 	router := routes.SetupRouter(db)
 
+	handler := core.CORSMiddleware(router) // Middleware aplicado aquí
+	
 	log.Println("🚀 Servidor corriendo en http://localhost:8080")
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	if err := http.ListenAndServe(":8080", handler); err != nil {
 		log.Fatal("❌ Error al iniciar el servidor:", err)
 	}
+	
 }
