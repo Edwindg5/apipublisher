@@ -1,3 +1,4 @@
+// api-database/src/pedidos/infraestructure/rabbitmq/publisher.go
 package rabbitmq
 
 import (

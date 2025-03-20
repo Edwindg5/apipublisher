@@ -2,10 +2,11 @@ package main
 
 import (
 	"demo/src/core"
-	"demo/src/core/routes"
+
 	"demo/src/pedidos/application"
 	"demo/src/pedidos/infraestructure/controllers"
 	"demo/src/pedidos/infraestructure/repositories"
+	"demo/src/core/routes"
 
 	"log"
 	"net/http"

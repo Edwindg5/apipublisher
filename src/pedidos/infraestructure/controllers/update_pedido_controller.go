@@ -29,14 +29,14 @@ func ActualizarPedido(useCase *application.UpdatePedidoUseCase) http.HandlerFunc
 			return
 		}
 
-		log.Printf("✅ Pedido actualizado: %+v", pedido)
+		log.Printf("✅ Pedido actualizado y enviado a RabbitMQ: %+v", pedido)
 
 		// 🔥 Notificar a los clientes SSE
 		NotificarPedidoActualizado(pedido)
 
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]string{
-			"message": "Pedido actualizado",
+			"message": "Pedido actualizado y enviado a RabbitMQ",
 		})
 	}
 }

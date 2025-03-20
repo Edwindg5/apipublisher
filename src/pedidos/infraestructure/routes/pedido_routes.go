@@ -1,3 +1,4 @@
+// api-database/src/pedidos/infraestructure/routes/pedido_routes.go
 package routes
 
 import (
@@ -19,6 +20,7 @@ func RegisterPedidoRoutes(router *mux.Router, db *sql.DB) {
 	putUseCase := &application.UpdatePedidoUseCase{Repo: *updateRepo}
 
 	router.HandleFunc("/pedidos", controllers.CrearPedido(createUseCase)).Methods("POST")
+
 	router.HandleFunc("/pedidos/pendientes", controllers.ObtenerPedidosPendientes(getUseCase)).Methods("GET")
 	router.HandleFunc("/pedidos/{id:[0-9]+}", controllers.BuscarPedidoPorID(getUseCase)).Methods("GET")
 	router.HandleFunc("/pedidos/{id:[0-9]+}", controllers.ActualizarPedido(putUseCase)).Methods("PUT")

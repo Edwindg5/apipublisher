@@ -14,7 +14,8 @@ func NewCreatePedidoRepository(db *sql.DB) *CreatePedidoRepository {
 }
 
 func (repo *CreatePedidoRepository) GuardarPedido(pedido entities.Pedido) error {
-	_, err := repo.DB.Exec("INSERT INTO pedidos (cliente, producto, cantidad, estado) VALUES (?, ?, ?, 'pendiente')",
-		pedido.Cliente, pedido.Producto, pedido.Cantidad)
+	_, err := repo.DB.Exec("INSERT INTO pedidos (cliente, producto, cantidad, estado) VALUES (?, ?, ?, ?)",
+    pedido.Cliente, pedido.Producto, pedido.Cantidad, pedido.Estado)
+
 	return err
 }

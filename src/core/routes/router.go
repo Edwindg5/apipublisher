@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"demo/src/core"
 	"demo/src/pedidos/infraestructure/routes"
+	notificacionroutes "demo/src/notificacion/infraestructure/routes"
+
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -17,5 +19,7 @@ func SetupRouter(db *sql.DB) *mux.Router {
 	}).Methods("GET")
 
 	routes.RegisterPedidoRoutes(router, db)
+	notificacionroutes.RegisterNotificacionRoutes(router, db)
+
 	return router
 }

@@ -14,11 +14,23 @@ type UpdatePedidoRepository struct {
 func NewUpdatePedidoRepository(db *sql.DB) *UpdatePedidoRepository {
 	return &UpdatePedidoRepository{DB: db}
 }
-
 func (r *UpdatePedidoRepository) UpdatePedido(pedido entities.Pedido) error {
-    query := "UPDATE pedidos SET estado = ? WHERE producto = ? AND cantidad = ?"
+    // Consultar la cantidad real antes de actualizar
+    var cantidadReal int
+    querySelect := "SELECT cantidad FROM pedidos WHERE producto = ?"
+    err := r.DB.QueryRow(querySelect, pedido.Producto).Scan(&cantidadReal)
+    if err != nil {
+        return fmt.Errorf("No se encontró un pedido con Producto: %s", pedido.Producto)
+    }
 
-    result, err := r.DB.Exec(query, pedido.Estado, pedido.Producto, pedido.Cantidad)
+    // Verificar si la cantidad enviada coincide con la cantidad real
+    if pedido.Cantidad != cantidadReal {
+        return fmt.Errorf("Cantidad incorrecta. Real: %d, Enviada: %d", cantidadReal, pedido.Cantidad)
+    }
+
+    // Usar la cantidad correcta en la actualización
+    queryUpdate := "UPDATE pedidos SET estado = ? WHERE producto = ? AND cantidad = ?"
+    result, err := r.DB.Exec(queryUpdate, pedido.Estado, pedido.Producto, pedido.Cantidad)
     if err != nil {
         return err
     }
@@ -30,4 +42,6 @@ func (r *UpdatePedidoRepository) UpdatePedido(pedido entities.Pedido) error {
 
     return nil
 }
+
+
 
