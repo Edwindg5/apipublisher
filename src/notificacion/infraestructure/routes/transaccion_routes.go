@@ -1,4 +1,3 @@
-// api-database/src/notificacion/infraestructure/routes/notificacion_routes.go
 package routes
 
 import (
@@ -10,17 +9,22 @@ import (
 
 	"github.com/gorilla/mux"
 )
+
 func RegisterNotificacionRoutes(router *mux.Router, db *sql.DB) {
 	notificacionRepo := repositories.NewNotificacionRepository(db)
 
-	// Ahora puedes asignarlo directamente a la interfaz
+	// Asignar la interfaz a la implementación
 	var repoInterface interfaces.NotificacionRepository = notificacionRepo
 
+	// Casos de uso
 	notificacionUseCase := &application.CreateNotificacionUseCase{Repo: repoInterface}
 	notificacionGetUseCase := &application.GetNotificacionesUseCase{Repo: repoInterface}
+	notificacionGetResumidaUseCase := &application.GetNotificacionesResumidasUseCase{Repo: repoInterface}
 
+	// Rutas
 	router.HandleFunc("/notificaciones", controllers.CrearNotificacion(notificacionUseCase)).Methods("POST")
 	router.HandleFunc("/notificaciones", controllers.ObtenerNotificaciones(notificacionGetUseCase)).Methods("GET")
+
+	// Nueva ruta para notificaciones resumidas
+	router.HandleFunc("/notificaciones/resumidas", controllers.ObtenerNotificacionesResumidas(notificacionGetResumidaUseCase)).Methods("GET")
 }
-
-

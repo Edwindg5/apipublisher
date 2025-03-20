@@ -1,17 +1,16 @@
-// api-database/src/notificacion/infraestructure/repositories/notificacion_repository.go
 package repositories
 
 import (
 	"database/sql"
 	"demo/src/notificacion/domain/entities"
-	"demo/src/notificacion/domain/interfaces" // Agregar la importación
+	"demo/src/notificacion/domain/interfaces"
 )
 
 type NotificacionRepository struct {
 	DB *sql.DB
 }
 
-// 🔹 Añadir esta línea para asegurar que implementa la interfaz
+// Asegura que el repositorio implementa la interfaz
 var _ interfaces.NotificacionRepository = (*NotificacionRepository)(nil)
 
 func NewNotificacionRepository(db *sql.DB) *NotificacionRepository {
@@ -37,6 +36,25 @@ func (repo *NotificacionRepository) GetNotificaciones() ([]entities.Notificacion
 	for rows.Next() {
 		var n entities.Notificacion
 		if err := rows.Scan(&n.ID, &n.PedidoID, &n.Cliente, &n.Producto, &n.Cantidad, &n.Estado, &n.Fecha); err != nil {
+			return nil, err
+		}
+		notificaciones = append(notificaciones, n)
+	}
+	return notificaciones, nil
+}
+
+// 🔥 Nuevo método para obtener las notificaciones resumidas
+func (repo *NotificacionRepository) GetNotificacionesResumidas() ([]entities.NotificacionResumida, error) {
+	rows, err := repo.DB.Query("SELECT producto, cantidad, estado, fecha FROM notificaciones")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var notificaciones []entities.NotificacionResumida
+	for rows.Next() {
+		var n entities.NotificacionResumida
+		if err := rows.Scan(&n.Producto, &n.Cantidad, &n.Estado, &n.Fecha); err != nil {
 			return nil, err
 		}
 		notificaciones = append(notificaciones, n)
