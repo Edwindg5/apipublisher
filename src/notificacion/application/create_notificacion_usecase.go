@@ -3,13 +3,13 @@ package application
 
 import (
 	"demo/src/notificacion/domain/entities"
-	"demo/src/notificacion/infraestructure/repositories"
+	"demo/src/notificacion/domain/interfaces" // Usar interfaces en vez de repositories
 )
 
 type CreateNotificacionUseCase struct {
-	Repo repositories.NotificacionRepository
+	Repo interfaces.NotificacionRepository // Cambiar de repositories.NotificacionRepository a interfaces.NotificacionRepository
 }
 
 func (uc *CreateNotificacionUseCase) CrearNotificacion(notificacion entities.Notificacion) error {
-	return uc.Repo.GuardarNotificacion(notificacion)
+	return uc.Repo.CrearNotificacion(notificacion)
 }
